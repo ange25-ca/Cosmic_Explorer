@@ -1,33 +1,46 @@
 //Se consume la API INSIGHT
-import { useEffect } from "react";
-import { View, Text , StyleSheet} from "react-native";
-import Apis from "../../data/datasources/AppApis";
+import { View, Text , StyleSheet, ActivityIndicator, FlatList} from "react-native";
+import { MarsViewModel } from "../viewModels/MarsVM";
 
 //Se crea la función para la vista
-export default function MarsClimate(){
-    //Se realiza un useEffect provicional para prueba de la Api
-    useEffect(()=> {
-        const fetchApod = async () => {
-            const api = Apis.getInstance();
-            try{
-            await api.getInsight(); 
-        }catch (error) {
-            console.error(" Error desde Screen:", error)
-        }
-        };
-        fetchApod();
-    },[]);
+export default function MarsClimateScreen(){
+    //Se llaman al viewModel
+    const {data, loading} = MarsViewModel();
+    //Se crea un if al loading, con ayuda del ActivityIndicator se coloca el tamaño
+    if(loading) return <ActivityIndicator size="large" />;
     return(
-        <View style={style.climate}>
-            <Text> El clima de marte es: </Text>
-        </View>
+      //Se realiza un flatlist con el proposito que se vean como fichas
+        <FlatList
+            data={data}
+            //Se coloca como item a la fecha de cada tarjeta
+            keyExtractor={(item, index) => item.date ?? `item-${index}`}
+            contentContainerStyle={style.climate}
+            renderItem={({ item }) => ( 
+            <View style={style.card}>
+            <Text style={style.textcard}>Date: {item.date}</Text>
+            <Text style={style.textcard}>Temperature: {item.temperatura}°C</Text>
+            <Text style={style.textcard}>Minimum temperature:{item.temperaturaMin}°C</Text>
+            <Text style={style.textcard}>Maximun temperature: {item.temperaturaMax}°C</Text>
+            <Text style={style.textcard}>Wind: {item.viento} m/s</Text>
+            </View>
+
+        )} />
     )
 }
 
 const style = StyleSheet.create({
     climate: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center"
-    }
+        padding: 16,
+    },
+    card: {
+        backgroundColor: "#fff",
+        padding: 12,
+        marginBottom: 12,
+        borderRadius: 8,
+        elevation: 3,
+    },
+    textcard: {
+        fontSize: 16,
+        marginBottom: 4,
+      },
 })
