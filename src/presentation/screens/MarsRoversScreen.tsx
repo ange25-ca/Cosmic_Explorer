@@ -1,27 +1,34 @@
 //Consume la API: MARS ROVER
 
-import { useEffect } from "react";
-import { View , Text} from "react-native";
-import Apis from "../../data/datasources/AppApis";
+import { StyleSheet, Image, ActivityIndicator, FlatList} from "react-native";
+import { useMarsRViewModel } from "../viewModels/MarsRVM";
 
-
+//Se crea la funcion para la vista
 export default function MarsRover(){
-    //Se realiza un useEffect provicional para prueba de la Api
-    useEffect(()=> {
-        const fetchApod = async () => {
-            const api = Apis.getInstance();
-            try{
-            await api.getMarsR(); 
-        }catch (error) {
-            console.error(" Error desde Screen:", error)
-        }
-        };
-        fetchApod();
-    },[]);
+    //Se llama al viewModel
+    const {data, loading} = useMarsRViewModel();
+    //Se realiza la valoracion del loading 
+    if(loading) return <ActivityIndicator size="large"/>
     return(
-        <View>
-            <Text>A continuación veras imagenes de marte:</Text>
-        </View>
+        <FlatList 
+        data={data}
+        keyExtractor={(item)=> item.id.toString()}
+        renderItem={({item}) => (
+            <Image 
+            source={{uri : item.img_src}}
+            style={style.img}
+            resizeMode="cover"
+            />
+        )}
+        />
     )
 
 }
+
+const style = StyleSheet.create({
+    img:{
+        width: "100%",
+        height: 200,
+        marginBottom: 10
+    }
+})
