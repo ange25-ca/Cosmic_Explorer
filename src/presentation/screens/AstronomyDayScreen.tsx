@@ -1,10 +1,14 @@
-import {View, Image, Text, StyleSheet, ActivityIndicator, ScrollView} from 'react-native';
+import {View, Image, Text, StyleSheet, ActivityIndicator, ScrollView, Platform} from 'react-native';
 import { useAstronomyViewModel } from '../viewModels/AstronomyVM';
+import { useThemeColors } from '../hook/themeColors';
 
 //Se crea una función para la vista
 export default function AstronomyDayScreen() {
     //Se uso el ViewModel para el loading y los datos, (imgenes o videos)
     const {data, loading, isImage, isVideo} = useAstronomyViewModel();
+    //Se agrega los colores dinamicos 
+    const colors = useThemeColors();
+
     /*Permite cargar el loading, en el AstronomyVM se declara como falso
      en el useEffect, el activityIndicator te permite mostrar la rueda de loading*/
     if (loading) return <ActivityIndicator  
@@ -13,14 +17,14 @@ export default function AstronomyDayScreen() {
         //Vista principal de AstronomiDay
         <View style={style.astronomyDay}>
                 {/*Se muestra el titulo de la imagen */}
-          <Text style={style.title}>{data?.title}</Text>
+          <Text style={[style.title, {color: colors.text}]}>{data?.title}</Text>
                 {/*Si la Api manda una imagen se muestra */}
             {isImage && (<Image source={{uri: data?.url}} style={style.image} resizeMode='cover'/>)}
                 {/*Se visualiza la descripcion de la imagen*/}
-          <Text style={style.description}>{data?.explanation}</Text>
+          <Text style={[style.description, {color: colors.text}]}>{data?.explanation}</Text>
                 {/*En ocasiones la APi devuelve un VIDEO por lo que se mostrata el URL */}
             {isVideo && (<> <Text>Hoy no hay imagen, pero puede ver el video aquí:</Text>
-                            <Text style={style.videoText}>{data?.url}</Text></>)}
+                            <Text style={[style.videoText, {color: colors.text}]}>{data?.url}</Text></>)}
         </View>
       );
 }
@@ -28,17 +32,21 @@ export default function AstronomyDayScreen() {
 //Se crean los estilos de la vista
 const style = StyleSheet.create({
     astronomyDay:{
-        flex: 1,
+        flexGrow: 1,
         padding: 20,
-        alignItems:"center",     
+        alignItems:"center", 
+        maxWidth: 800,
+        alignSelf: 'center'    
     },
     title:{
-        fontSize: 35,
-        color: "#000"
+        fontSize: Platform.OS === 'web' ? 40 : 30,
+        fontWeight: 500,
+        alignItems:'center'
     },
     description:{
-        fontSize: 15,
-        color:"#171818",
+        fontSize: Platform.OS === 'web' ? 25 : 30,
+        textAlign:'center',
+        marginTop: 10
     },
     image: {
         width: '100%',
