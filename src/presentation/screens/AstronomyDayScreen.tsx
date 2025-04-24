@@ -5,64 +5,112 @@ import { useThemeColors } from '../hook/themeColors';
 //Se crea una función para la vista
 export default function AstronomyDayScreen() {
     //Se uso el ViewModel para el loading y los datos, (imgenes o videos)
-    const {data, loading, isImage, isVideo} = useAstronomyViewModel();
+    const { data, loading, isImage, isVideo } = useAstronomyViewModel();
     //Se agrega los colores dinamicos 
     const colors = useThemeColors();
 
+    //Se evalua si esta en web
+    const isWeb = Platform.OS === 'web';
+    //Se crea una constante para aplicar el diseño conforme a la plataforma
+    const layoutStyle = isWeb ? webStyles : androidStyles;
+
     /*Permite cargar el loading, en el AstronomyVM se declara como falso
      en el useEffect, el activityIndicator te permite mostrar la rueda de loading*/
-    if (loading) return <ActivityIndicator  
+    if (loading) return <ActivityIndicator
         /*Tamaño*/ size="large" />
     return (
         //Vista principal de AstronomiDay
-        <View style={style.astronomyDay}>
+        <View style={layoutStyle.container}>
+            <View style={layoutStyle.leftColumn}>
                 {/*Se muestra el titulo de la imagen */}
-          <Text style={[style.title, {color: colors.text}]}>{data?.title}</Text>
+                <Text style={[layoutStyle.title, { color: colors.text }]}>{data?.title}</Text>
                 {/*Si la Api manda una imagen se muestra */}
-            {isImage && (<Image source={{uri: data?.url}} style={style.image} resizeMode='cover'/>)}
-                {/*Se visualiza la descripcion de la imagen*/}
-          <Text style={[style.description, {color: colors.text}]}>{data?.explanation}</Text>
-                {/*En ocasiones la APi devuelve un VIDEO por lo que se mostrata el URL */}
+                {isImage && (<Image source={{ uri: data?.url }} style={layoutStyle.image} resizeMode='cover' />)}
+            </View>
+            {/*Se visualiza la descripcion de la imagen*/}
+            <View style={layoutStyle.rightColumn}>
+                <Text style={[layoutStyle.description, { color: colors.text }]}>{data?.explanation}</Text>
+            </View>
+            {/*En ocasiones la APi devuelve un VIDEO por lo que se mostrata el URL */}
             {isVideo && (<> <Text>Hoy no hay imagen, pero puede ver el video aquí:</Text>
-                            <Text style={[style.videoText, {color: colors.text}]}>{data?.url}</Text></>)}
+                <Text style={[layoutStyle.videoText, { color: colors.text }]}>{data?.url}</Text></>)}
         </View>
-      );
+    );
 }
 
-//Se crean los estilos de la vista
-const style = StyleSheet.create({
-    astronomyDay:{
-        flexGrow: 1,
-        padding: 20,
-        alignItems:"center", 
-        maxWidth: 800,
-        alignSelf: 'center'    
+//Se crean los estilos para cada plataforma
+//Se crea los estilos para web
+const webStyles = StyleSheet.create({
+    container: {
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+        padding: 20
     },
-    title:{
-        fontSize: Platform.OS === 'web' ? 40 : 30,
-        fontWeight: 500,
-        alignItems:'center'
+    leftColumn: {
+        flex: 1,
+        alignItems: 'center'
     },
-    description:{
-        fontSize: Platform.OS === 'web' ? 25 : 30,
-        textAlign:'center',
-        marginTop: 10
+    rightColumn: {
+        flex: 1,
+        alignItems: 'center'
     },
     image: {
-        width: '100%',
-        height: 200,
-        borderRadius: 10,
-        marginBottom: 10
+        width: 600,
+        height: 450,
+        marginTop: 10,
+    },
+    title: {
+        fontSize: 40,
+        fontWeight: 500,
+        alignItems: 'center'
+    },
+    description: {
+        fontSize: 18,
+        textAlign: 'justify',
+        marginTop: 55,
+        marginRight: 50
     },
     videoText: {
         color: '#fff',
         fontSize: 16,
         marginBottom: 8
     },
-    videoUrl: {
-        color: '#00f',
-        textDecorationLine: 'underline',
-        fontSize: 16
-    }
-      
+})
+
+//Se crea los estilos para android
+const androidStyles = StyleSheet.create({
+    container: {
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    leftColumn: {
+        width: '100%',
+        alignItems: 'center',
+    },
+    rightColumn: {
+        width: '100%',
+        marginTop: 10,
+        paddingHorizontal: 10,
+    },
+    image: {
+        width: 360,
+        height: 250,
+        marginTop: 15,
+    },
+    title: {
+        fontSize: 25,
+        marginTop: 15,
+        fontWeight: 500,
+        alignItems: 'center'
+    },
+    description: {
+        fontSize: 15,
+        textAlign: 'justify',
+        padding: 15
+    },
+    videoText: {
+        color: '#fff',
+        fontSize: 16,
+        marginBottom: 8
+    },
 })

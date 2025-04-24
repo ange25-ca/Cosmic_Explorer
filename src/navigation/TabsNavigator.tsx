@@ -8,7 +8,7 @@ import NearbyObjects from "../presentation/screens/NearbyObjectsScreen";
 import MarsRover from "../presentation/screens/MarsRoversScreen";
 import { useThemeColors } from "../presentation/hook/themeColors";
 import { useDispatch } from "react-redux";
-import { View } from "react-native";
+import { View, StyleSheet } from "react-native";
 import ThemeToggleButton from "../presentation/components/themeButton";
 
 
@@ -24,14 +24,7 @@ export function TopTabsNavigator() {
     return (
         <View style={{ flex: 1 }}>
             {/* Botón para cambiar tema (modo claro/oscuro) */}
-            <View
-                style={{
-                    backgroundColor: colors.background,
-                    paddingHorizontal: 16,
-                    paddingVertical: 12,
-                    alignItems: 'flex-end',
-                }}
-            >
+            <View style={[style.themeButton, {backgroundColor: colors.background}]}>
                 <ThemeToggleButton />
             </View>
             <Tab.Navigator
@@ -77,3 +70,11 @@ export function TopTabsNavigator() {
         </View>
     )
 }
+
+const style = StyleSheet.create({
+    themeButton: {
+        paddingHorizontal: 16,
+        paddingVertical: 12,
+        alignItems: 'flex-end',
+    }
+})
