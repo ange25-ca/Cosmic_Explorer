@@ -1,21 +1,39 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/store";
-import { Button } from "react-native";
+import { TouchableOpacity , Text, StyleSheet} from "react-native";
 import { toggleTheme } from "../../store/slices/theme/themeSlice";
 
-//Se crea la funcion para el botón que permitira el cambio de color
+//Boton para cambiar de modo
+
+//Se crea la función para el botón
 export default function ThemeButton() {
-  //Se crea la constate para el dispatch
+  //se usa el dispach para activar mod
   const dispatch = useDispatch();
-  //Se usa el selector para el cambio de color y se establece el nuevo color
+  //Utiliza el useSelector (redux)
   const theme = useSelector((state: RootState) => state.theme.mode);
 
- return (
-    <Button
-      title={theme === 'light' ? '🌙' : '☀️'}
+  return (
+    //Se utiliza touchOpacity (mejor personalización del boton)
+    <TouchableOpacity
+    //Se llama al toogleTheme  (encargado de los temas)
       onPress={() => dispatch(toggleTheme())}
-      color={theme === 'light' ? '#000' : '#fff'}
-    />
+      style={[
+        styles.button,
+        { backgroundColor: theme === 'light' ? '#fff' : '#333' },
+      ]}
+    >
+      <Text style={{ fontSize: 18 }}>{theme === 'light' ? '🌙' : '☀️'}</Text>
+    </TouchableOpacity>
   );
-} 
+}
+
+//Stylos para el botton
+const styles = StyleSheet.create({
+  button: {
+    marginRight: 15,
+    padding: 8,
+    borderRadius: 20,
+  },
+});
+

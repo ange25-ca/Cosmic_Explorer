@@ -6,9 +6,9 @@ interface ThemeState {
   mode: 'light' | 'dark';
 }
 
-//Se tieme por defecto al estado claro
+//Se tieme por defecto al estado obscuro
 const initialState: ThemeState = {
-  mode: 'light',
+  mode: 'dark',
 };
 
 //Se crea el slice que usara redux
