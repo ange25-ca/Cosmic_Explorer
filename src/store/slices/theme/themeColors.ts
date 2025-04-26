@@ -5,6 +5,8 @@ export const lightTheme = {
     text: '#000',
     primary: '#7F00FF',
     secondary: '#EFEFEF',
+    card: '#6c4fce',
+
   };
   /*MOD: OSCURO */
   export const darkTheme = {
@@ -12,5 +14,6 @@ export const lightTheme = {
     text: '#fff',
     primary: '#7F00FF',
     secondary: '#1C1C1E',
+    card: '#a766e4'
   };
   

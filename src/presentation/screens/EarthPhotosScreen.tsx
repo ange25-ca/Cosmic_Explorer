@@ -1,12 +1,20 @@
 //Se consume la Api EPIC 
-import { View, Text, Image, StyleSheet, ActivityIndicator } from "react-native";
+import { View, Text, Image, StyleSheet, ActivityIndicator, Platform } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { useEarthViewModel } from "../viewModels/EarthVM";
+import { useThemeColors } from "../hook/themeColors";
 
 //Se crea la funcion para la vista
 export default function EarthPhotos() {
     //Se utiliza las constantes de ViewModel
     const {data, loading} = useEarthViewModel();
+    //Se llama a los colores por mod
+    const colors = useThemeColors();
+    //Se realiza la validación de la plataforma
+    const isWeb = Platform.OS === 'web';
+    //se crea la constante para la plataforma para cada estilo
+    const layoutStyle = isWeb ? webStyles : androidStyles;
+
     //El loading se mantiene mientras se carga la Api
     if(loading) {
         //Se utiliza el ActivityIndicator para el icon
@@ -19,11 +27,11 @@ export default function EarthPhotos() {
             data={data}
             //Se obtiene la fecha
             keyExtractor={(item) => item.date}
-            contentContainerStyle={style.container}
+            contentContainerStyle={layoutStyle.container}
             renderItem={({ item }) => (
-                <View style={style.card}>
-                    <Image source={{ uri: item.image }} style={style.image} />
-                <Text style={style.caption}>{item.caption}</Text>
+                <View style={layoutStyle.card}>
+                    <Image source={{ uri: item.image }} style={layoutStyle.image} />
+                <Text style={[layoutStyle.caption, {color: colors.text}]}>{item.caption}</Text>
                 </View>
             )}>
 
@@ -31,31 +39,53 @@ export default function EarthPhotos() {
     )
 }
 
-const style = StyleSheet.create({
-    earthPhotos: {
-        flex: 1,
-        alignItems: "center",
-        justifyContent: "center"
+//estilos para web
+const webStyles = StyleSheet.create({
+    container: {
+        padding: 20,
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
     },
-    container: { 
-        padding: 10 
+    card: {
+        width: 300,
+        margin: 15,
+        alignItems: 'center',
     },
-    card: { 
-        marginBottom: 20, 
-        alignItems: 
-        'center' 
+    image: {
+        width: 300,
+        height: 300,
+        borderRadius: 10,
     },
-    image: { 
-        width: 300, 
-        height: 300, 
-        borderRadius: 
-        10 },
-    caption: { 
-        marginTop: 10, 
-        fontSize: 16, 
-        color: '#333', 
-        textAlign: 'center' 
-    }
-}) 
+    caption: {
+        marginTop: 10,
+        fontSize: 16,
+        textAlign: 'center',
+    },
+});
+
+
+//Diseño para mobile
+const androidStyles = StyleSheet.create({
+    container: {
+        padding: 10,
+        alignItems: 'center',
+    },
+    card: {
+        marginBottom: 20,
+        margin: 15,
+        alignItems: 'center',
+    },
+    image: {
+        width: 300,
+        height: 300,
+        borderRadius: 10,
+    },
+    caption: {
+        marginTop: 10,
+        fontSize: 16,
+        textAlign: 'center',
+    },
+});
 
     
