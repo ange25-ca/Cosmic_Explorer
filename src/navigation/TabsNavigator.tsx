@@ -27,47 +27,47 @@ export function TopTabsNavigator() {
             <View style={[style.themeButton, {backgroundColor: colors.background}]}>
                 <ThemeToggleButton />
             </View>
-            <Tab.Navigator
-                screenOptions={{
-                    tabBarStyle: { backgroundColor: colors.background },
-                    tabBarActiveTintColor: colors.primary,
-                    tabBarInactiveTintColor: colors.text,
-                    tabBarIndicatorStyle: { backgroundColor: colors.primary },
-                    tabBarLabelStyle: { fontWeight: 'bold' },
+                <Tab.Navigator
+                    screenOptions={{
+                        tabBarStyle: { backgroundColor: colors.background },
+                        tabBarActiveTintColor: colors.primary,
+                        tabBarInactiveTintColor: colors.text,
+                        tabBarIndicatorStyle: { backgroundColor: colors.primary },
+                        tabBarLabelStyle: { fontWeight: 'bold' },
 
-                }}>
-                {/*Primera Principal*/}
-                <Tab.Screen
-                    name="Home"
-                    component={HomeScreen}
-                />
-                {/*Vista de APOD */}
-                <Tab.Screen
-                    name="Astronomy Day"
-                    component={AstronomyDayScreen}
-                />
-                {/*Vista de EPIC*/}
-                <Tab.Screen
-                    name="Earth Photos"
-                    component={EarthPhotos}
-                />
-                {/*Vista de INSIGHT (MARS CLIMATE)*/}
-                <Tab.Screen
-                    name="Mars Climate"
-                    component={MarsClimateScreen}
-                />
-                {/*Vista de SSD/NEOS (OBJECTS) */}
-                <Tab.Screen
-                    name="Nerby Objects"
-                    component={NearbyObjects}
-                />
-                {/*Vista de Mars Rover */}
-                <Tab.Screen
-                    name="Mars Rovers"
-                    component={MarsRover}
-                />
-            </Tab.Navigator>
-        </View>
+                    }}>
+                    {/*Primera Principal*/}
+                    <Tab.Screen
+                        name="Home"
+                        component={HomeScreen}
+                    />
+                    {/*Vista de APOD */}
+                    <Tab.Screen
+                        name="Astronomy Day"
+                        component={AstronomyDayScreen}
+                    />
+                    {/*Vista de EPIC*/}
+                    <Tab.Screen
+                        name="Earth Photos"
+                        component={EarthPhotos}
+                    />
+                    {/*Vista de INSIGHT (MARS CLIMATE)*/}
+                    <Tab.Screen
+                        name="Mars Climate"
+                        component={MarsClimateScreen}
+                    />
+                    {/*Vista de SSD/NEOS (OBJECTS) */}
+                    <Tab.Screen
+                        name="Nerby Objects"
+                        component={NearbyObjects}
+                    />
+                    {/*Vista de Mars Rover */}
+                    <Tab.Screen
+                        name="Mars Rovers"
+                        component={MarsRover}
+                    />
+                </Tab.Navigator>
+            </View>
     )
 }
 

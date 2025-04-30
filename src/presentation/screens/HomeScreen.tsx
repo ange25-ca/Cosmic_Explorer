@@ -55,6 +55,7 @@ export default function HomeScreen() {
             > 
             Cosmic Explorer
             </Animated.Text>
+            
         </View>
     )
 }
