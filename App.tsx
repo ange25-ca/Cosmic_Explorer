@@ -1,13 +1,12 @@
 import "react-native-gesture-handler";
 import React from 'react';
 import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native';
-import DrawerNavigator from './src/navigation/DrawerNavigator';
 import { enableScreens } from "react-native-screens";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Platform, StyleSheet } from "react-native";
 import { Provider, useSelector } from "react-redux";
 import { RootState, store } from "./src/store/store";
-import { TopTabsNavigator } from "./src/navigation/TabsNavigator";
+import StackNavigator from "./src/navigation/StackNavigator";
 
 /*Se activa la optimización de las screens */
 enableScreens();
@@ -20,9 +19,8 @@ const AppRedux = () => {
 
   return(
     <NavigationContainer theme={theme == 'dark' ? DarkTheme : DefaultTheme}>
-      {/*Dependiendo en que plataforma este se vera la navegación 
-      para Android: Drawer , para web: Tabs*/}
-      {isWeb ? <TopTabsNavigator/> : <DrawerNavigator/>}
+      {/*Se añade el stack (se cambia la validación de la navegación en StackNavigation)*/}
+      <StackNavigator/>  
     </NavigationContainer> 
   )
 }

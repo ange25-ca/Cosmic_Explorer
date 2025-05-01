@@ -1,18 +1,13 @@
-import { View, Text, Platform } from "react-native";
+import { View, Text, Platform, TouchableOpacity } from "react-native";
 import { StyleSheet } from "react-native";
 import { useThemeColors } from "../hook/themeColors";
-import Animated, {
-    Easing,
-    useSharedValue,
-    useAnimatedStyle,
-    withRepeat,
-    withTiming
-} from 'react-native-reanimated';
-import { useEffect } from "react";
+import { useNavigation } from "@react-navigation/native";
+import { RootStackParamList } from "../../types/navigatorTypes";
+import { StackNavigationProp } from "@react-navigation/stack";
 
-//Se hace una referencia a la animación 
-const duration = 2000;
-const easing = Easing.bezier(0.25, -0.5, 0.25, 1);
+{/*Para que typescript reconozca las rutas, se maneja como props, se le dice por medio 
+del tipado en NavigatorType las rutas que puede tomar la pantalla homeScreen*/}
+type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Main'>;
 
 export default function HomeScreen() {
 
@@ -22,40 +17,20 @@ export default function HomeScreen() {
     const layoutStyle = isWeb ? webStyles : androidStyles;
     //Se llaman los colores de cada tema
     const colors = useThemeColors();
-
-    //Se inicializa la animacion en 0
-    const translateY = useSharedValue(0);
-
-    //Se usa un useEfect para la animación
-    useEffect(() => {
-        translateY.value = withRepeat(
-            withTiming(30, {duration, easing}), 
-            //El 1 de duracion permite que sea repetitivo
-            -1,
-            //Hace que suba y baje el texto
-            true
-        )
-    }, []);
-
-    //Se actualiza la posicion del teclado atravez de la presente función
-    const animatedStyle = useAnimatedStyle(() => ({
-        transform:[{ translateY: translateY.value}],
-    }));
+    //Se crea la constante para la navegación 
+    const navigation = useNavigation<HomeScreenNavigationProp>();
+    //Función flecha que permite abrir el Modal
+    const openModal = () => {
+        navigation.navigate('Forms'); 
+      };
 
     return(
         <View style={layoutStyle.home}>
-           <Text style= {[layoutStyle.title, {color: colors.text}]}>Bienvenidos a </Text> 
-            <Animated.Text 
-                style={[ layoutStyle.text, {
-                    color: colors.text,
-                },
-                //Se llama a la funcion 
-                animatedStyle,
-            ]}
-            > 
-            Cosmic Explorer
-            </Animated.Text>
-            
+            <Text style={[layoutStyle.title, { color: colors.text }]}>Bienvenidos a  Cosmic Explorer</Text>
+            {/*Se crea el botón para abrir el modal */}
+            <TouchableOpacity onPress={openModal} style={[layoutStyle.button, {backgroundColor: colors.background}]}>
+                <Text style={[layoutStyle.buttonText, { color: colors.text }]}>Abrir Modal</Text>
+            </TouchableOpacity>
         </View>
     )
 }
@@ -72,7 +47,15 @@ const webStyles = StyleSheet.create({
     },
     text:{
         fontSize: 80,
-    }
+    },
+    button: {
+        paddingVertical: 10,         
+        paddingHorizontal: 20,       
+        borderRadius: 5,            
+      },
+      buttonText: {
+        fontSize: 18,               
+      },
 })
 
 const androidStyles = StyleSheet.create({
@@ -87,5 +70,13 @@ const androidStyles = StyleSheet.create({
     },
     text:{
         fontSize: 45,
-    }
+    },
+    button: {
+        paddingVertical: 10,         
+        paddingHorizontal: 20,      
+        borderRadius: 5,            
+      },
+      buttonText: {
+        fontSize: 18,               
+      },
 })
