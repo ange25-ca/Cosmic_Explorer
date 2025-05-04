@@ -6,6 +6,8 @@ export const lightTheme = {
     primary: '#7F00FF',
     secondary: '#EFEFEF',
     card: '#6c4fce',
+    buttonColor: '#a48fe8',
+    buttonborder: '#000'
 
   };
   /*MOD: OSCURO */
@@ -14,6 +16,8 @@ export const lightTheme = {
     text: '#fff',
     primary: '#7F00FF',
     secondary: '#1C1C1E',
-    card: '#a766e4'
+    card: '#a766e4',
+    buttonColor: "#553ea5",
+    buttonborder: '#fff'
   };
   
