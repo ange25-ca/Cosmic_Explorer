@@ -4,6 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useForm , Controller} from "react-hook-form";
 import { FormResponse } from "../../types/FormResponse";
 import { FormService } from "../../services/FormService";
+import { useEffect, useState } from "react";
 
 //Se crea la funcion para la pantalla del formulario
 export default function FormScreen (){
@@ -19,6 +20,34 @@ export default function FormScreen (){
         },
     });
     
+    /*Se crea las constante para el estado del formulario */
+    const [ isCompleted, setItemCompleted] = useState(false);
+    const [isLoading, setIsLoading] = useState(true); // ← nueva bandera
+
+
+  useEffect(() => {
+    /*Se realiza un chequeo del estado */
+    const checkStatus = async () => {
+      const completed = await FormService.isFormCompleted();
+      setItemCompleted(completed);
+
+      /*Dependeindo de que plataforma sea muestra una alerta */
+      if (completed) {
+        if (Platform.OS === 'web') {
+          window.alert('Ya has respondido');
+        } else {
+          Alert.alert('Encuesta completada, Solo se responde una vez')
+        }
+        navigation.goBack();
+      } else {
+        setIsLoading(false);
+      }
+    };
+    checkStatus();
+  }, []);
+
+
+
     // Cuando se envía el formulario
   const onSubmit = async (data: any) => {
     try {
@@ -47,6 +76,11 @@ export default function FormScreen (){
       }
     }
   };
+
+  if (isLoading){
+    return null;
+  }
+  
     return (
         <View style={styles.container}>
            <FormSelect 

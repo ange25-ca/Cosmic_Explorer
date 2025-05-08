@@ -1,24 +1,36 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FormResponse } from "../types/FormResponse";
+import { Storage } from "../data/storage/storagedata";
 
 //Se crea una constante para el asyncstorage
-const SURVEY_STORAGE_KEY = 'form_responses';
+const FORM_STATUS = 'form_status';
 
 export class FormService {
     //Permite guardar la respuesta de forma estatica
     static async saveResponse( response: FormResponse): Promise<void>{
         try {
-            //Obtiene las respuestas
-            const existing = await AsyncStorage.getItem(SURVEY_STORAGE_KEY);
-            //En caso de que haya crea un array
-            const responses: FormResponse[] = existing ? JSON.parse(existing) : [];
-            //Agrega la respuesta al array
-            responses.push(response);
-            //Guarda el estado en el array
-            await AsyncStorage.setItem(SURVEY_STORAGE_KEY, JSON.stringify(responses));
-
+            /*Se marca el formulario como completado */
+            const formStatus = {
+                response, 
+                completed:true,
+            };
+            /*Se guarda el estado del formulario */
+            await Storage.setItem(FORM_STATUS, JSON.stringify(formStatus));
         } catch (error) {
             console.error('Error del guardado', error);
+        }
+    }
+
+    /*Permite la verificacion del estado del formulario */
+    static async isFormCompleted(): Promise<boolean> {
+        try {
+            const status = await Storage.getItem(FORM_STATUS);
+            const formStatus = status ? JSON.parse(status) : null;
+            /*Verifica si el formulario está completo */
+            return formStatus.completed === true;
+        } catch(error){
+            console.error('Error al verificar el estado del formulario', error);
+            return false;
         }
     }
 }
