@@ -1,4 +1,4 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FormResponse } from "../types/FormResponse";
 import { Storage } from "../data/storage/storagedata";
 
@@ -25,7 +25,8 @@ export class FormService {
     static async isFormCompleted(): Promise<boolean> {
         try {
             const status = await Storage.getItem(FORM_STATUS);
-            const formStatus = status ? JSON.parse(status) : null;
+            if (!status) return false;
+            const formStatus = JSON.parse(status);
             /*Verifica si el formulario está completo */
             return formStatus.completed === true;
         } catch(error){
@@ -33,4 +34,6 @@ export class FormService {
             return false;
         }
     }
+
+
 }

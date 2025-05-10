@@ -1,4 +1,4 @@
-import { Alert, View , StyleSheet, Platform} from "react-native";
+import { Alert, View , StyleSheet, Platform, Button} from "react-native";
 import FormSelect from "../components/FormDinamic";
 import { useNavigation } from "@react-navigation/native";
 import { useForm , Controller} from "react-hook-form";
